@@ -1,0 +1,22 @@
+
+server:
+  port: 8761
+
+management:
+  tracing:
+    sampling:
+      probability: 0.1
+
+spring:
+  application:
+    name: service-registry
+  config:
+    import: "optional:configserver:http://localhost:8088"
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

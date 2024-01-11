@@ -1,0 +1,40 @@
+#management:
+#  tracing:
+#    sampling:
+#      probability: 0.1
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: "optional:configserver:http://localhost:8088"
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: auth-service
+            uri: lb://auth-service
+            predicates:
+              - Path=/auth/**
+          - id: crypto-service
+            uri: lb://crypto-service
+            predicates:
+              - Path=/crypto/**
+          - id: payment-service
+            uri: lb://payment-service
+            predicates:
+              - Path=/payment/**
+          - id: translation-service
+            uri: lb://translation-service
+            predicates:
+              - Path=/translation/**
+          - id: user-service
+            uri: lb://user-service
+            predicates:
+              - Path=/user/**
+          - id: wallet-service
+            uri: lb://wallet-service
+            predicates:
+              - Path=/wallet/**
+
+          #Todo: add prediction service for flask/django

@@ -1,0 +1,13 @@
+
+spring:
+  application:
+    name: user-service
+  config:
+    import: "optional:configserver:http://localhost:8088"
+
+##zipking configurations
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+

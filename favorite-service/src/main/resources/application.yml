@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: favorite-service
+  config:
+    import: "optional:configserver:http://localhost:8088"
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    database: MySQL
+    database-platform: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/crypto-favorite
+    username: root
+    password:
+
+##zipking configurations
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+
+
+
+
+
