@@ -17,11 +17,6 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     private final AuthClient authClient;
-    @GetMapping("/hello")
-    public String hello(HttpServletRequest request){
-
-        return this.authClient.getUserId(request);
-    }
 
     //Create profile
     @PostMapping("/create")

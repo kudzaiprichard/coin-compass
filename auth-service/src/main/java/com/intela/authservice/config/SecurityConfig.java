@@ -32,22 +32,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize)->authorize
                         .requestMatchers("/api/v1/auth/**")
                         .permitAll()
-
-                        //Todo: Add proper endpoints
-                        //Admin ENDPOINTS
-                        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-                        .requestMatchers(GET,"/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-                        .requestMatchers(POST,"/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-                        .requestMatchers(PUT,"/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-                        .requestMatchers(DELETE,"/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
-
-                        //CUSTOMER ENDPOINTS
-                        .requestMatchers("/api/v1/customer/**").hasRole(CUSTOMER.name())
-                        .requestMatchers(GET,"/api/v1/customer/**").hasAuthority(CUSTOMER_READ.name())
-                        .requestMatchers(POST,"/api/v1/customer/**").hasAuthority(CUSTOMER_CREATE.name())
-                        .requestMatchers(PUT,"/api/v1/customer/**").hasAuthority(CUSTOMER_UPDATE.name())
-                        .requestMatchers(DELETE,"/api/v1/customer/**").hasAuthority(CUSTOMER_DELETE.name())
-
                         .anyRequest()
                         .authenticated()
                 )
