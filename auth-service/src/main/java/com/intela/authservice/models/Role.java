@@ -13,20 +13,20 @@ import static com.intela.authservice.models.Permission.*;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-    CUSTOMER(
+    ADMIN(
             Set.of(
-                  CUSTOMER_READ,
-                    CUSTOMER_CREATE,
-                    CUSTOMER_UPDATE,
-                    CUSTOMER_DELETE
+                    ADMIN_READ,
+                    ADMIN_CREATE,
+                    ADMIN_UPDATE,
+                    ADMIN_DELETE
             )
     ),
-    SHOPKEEPER(
+    CUSTOMER(
             Set.of(
-                    SHOPKEEPER_CREATE,
-                    SHOPKEEPER_DELETE,
-                    SHOPKEEPER_UPDATE,
-                    SHOPKEEPER_READ
+                    CUSTOMER_CREATE,
+                    CUSTOMER_DELETE,
+                    CUSTOMER_UPDATE,
+                    CUSTOMER_READ
             )
     );
 
