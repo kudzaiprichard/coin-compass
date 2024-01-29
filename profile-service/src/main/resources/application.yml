@@ -4,6 +4,10 @@ spring:
     name: user-service
   config:
     import: "optional:configserver:http://localhost:8088"
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/coinCompassProfile
+      auto-index-creation: true
 
 ##zipking configurations
 management:

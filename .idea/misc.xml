@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/crypto-service/pom.xml" />
         <option value="$PROJECT_DIR$/favorite-service/pom.xml" />
         <option value="$PROJECT_DIR$/service-registry/pom.xml" />
+        <option value="$PROJECT_DIR$/profile-service/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
