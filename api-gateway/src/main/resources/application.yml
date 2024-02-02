@@ -15,26 +15,13 @@ spring:
           - id: auth-service
             uri: lb://auth-service
             predicates:
-              - Path=/auth/**
-          - id: crypto-service
-            uri: lb://crypto-service
+              - Path=api/v1/auth/**
+
+          - id: profile-service
+            uri: lb://profile-service
             predicates:
-              - Path=/crypto/**
-          - id: payment-service
-            uri: lb://payment-service
-            predicates:
-              - Path=/payment/**
-          - id: translation-service
-            uri: lb://translation-service
-            predicates:
-              - Path=/translation/**
-          - id: user-service
-            uri: lb://user-service
-            predicates:
-              - Path=/user/**
-          - id: wallet-service
-            uri: lb://wallet-service
-            predicates:
-              - Path=/wallet/**
+              - Path=api/v1/profile/**
+
+
 
           #Todo: add prediction service for flask/django

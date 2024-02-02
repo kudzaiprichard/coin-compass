@@ -13,7 +13,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
 
     //Create user profile
-    private void createUserProfile(Profile profile){
+    public Profile createUserProfile(Profile profile){
         var _profile = Profile
                 .builder()
                 .firstname(profile.getFirstname())
@@ -22,12 +22,12 @@ public class ProfileService {
                 .address(profile.getAddress())
                 .userId(profile.getUserId())
                 .build();
-        this.profileRepository.save(_profile);
+        return this.profileRepository.save(_profile);
     }
 
     //Update user profile by  id
-    private Profile updateProfileById(Profile profile, String id){
-        var profileDb = this.profileRepository.findById(id)
+    public Profile updateProfileById(Profile profile, String userId){
+        var profileDb = this.profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Profile not available"));
 
         if(!profile.getFirstname().isBlank()){profileDb.setFirstname(profile.getFirstname());}
@@ -41,21 +41,22 @@ public class ProfileService {
     }
 
     //Fetch all user profiles
-    private List<Profile> fetchAllProfiles(){
+    public List<Profile> fetchAllProfiles(){
         return this.profileRepository.findAll();
     }
 
     //Fetch user profile by user id
-    private Profile fetchProfileByUserId(String userId){
+    public Profile fetchProfileByUserId(String userId){
         return this.profileRepository.findByUserId(userId)
                 .orElseThrow(() ->  new RuntimeException("Profile is not available"));
     }
 
     //Delete user profile by user id
-    private void deleteProfile(String id){
+    public String deleteProfile(String id){
         var profile = this.profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile is not available"));
 
         this.profileRepository.delete(profile);
+        return "Profile deleted successfully";
     }
 }
