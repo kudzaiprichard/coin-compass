@@ -3,12 +3,13 @@ package com.intela.favoriteservice.services;
 import com.intela.favoriteservice.models.Favorite;
 import com.intela.favoriteservice.repository.FavoriteRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
