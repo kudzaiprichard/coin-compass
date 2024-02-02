@@ -27,7 +27,7 @@ public class ProfileService {
 
     //Update user profile by  id
     public Profile updateProfileById(Profile profile, String userId){
-        var profileDb = this.profileRepository.findByUserId(userId)
+        var profileDb = this.profileRepository.findProfileByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Profile not available"));
 
         if(!profile.getFirstname().isBlank()){profileDb.setFirstname(profile.getFirstname());}
@@ -47,7 +47,7 @@ public class ProfileService {
 
     //Fetch user profile by user id
     public Profile fetchProfileByUserId(String userId){
-        return this.profileRepository.findByUserId(userId)
+        return this.profileRepository.findProfileByUserId(userId)
                 .orElseThrow(() ->  new RuntimeException("Profile is not available"));
     }
 

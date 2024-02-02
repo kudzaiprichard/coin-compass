@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;
-    private final ObjectMapper objectMapper;
     private final AuthClient authClient;
 
     //Create profile
