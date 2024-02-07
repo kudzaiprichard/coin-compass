@@ -1,13 +1,11 @@
 package com.intela.userservice.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intela.userservice.client.AuthClient;
 import com.intela.userservice.models.Profile;
 import com.intela.userservice.request.ProfileRequest;
 import com.intela.userservice.services.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +17,20 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     private final AuthClient authClient;
+    @GetMapping("/hello")
+    public String hello(HttpServletRequest request){
+
+        return this.authClient.getUserId(request);
+    }
 
     //Create profile
     @PostMapping("/create")
     public ResponseEntity<Profile> createProfile(
-            @RequestBody ProfileRequest profileRequest
+            @RequestBody ProfileRequest profileRequest,
+            HttpServletRequest request
     ){
         //Get logged user id
-        String userId = authClient.getLoggedInUser().getBody();
+        String userId = authClient.getUserId(request);
 
         //Create Profile object
         var profile = Profile
@@ -48,10 +52,11 @@ public class ProfileController {
     //update profile
     @PutMapping("/update")
     public ResponseEntity<Profile> updateProfile(
-            @RequestBody ProfileRequest profileRequest
+            @RequestBody ProfileRequest profileRequest,
+            HttpServletRequest request
     ){
         //Get logged user id
-        String userId = authClient.getLoggedInUser().getBody();
+        String userId = authClient.getUserId(request);
 
         //Create Profile object
         var profile = Profile
@@ -78,9 +83,9 @@ public class ProfileController {
 
     //Fetch user profile by user id
     @GetMapping("/")
-    public ResponseEntity<Profile> getProfile(){
+    public ResponseEntity<Profile> getProfile(HttpServletRequest request){
         //Get logged user id
-        String userId = authClient.getLoggedInUser().getBody();
+        String userId = authClient.getUserId(request);
         return ResponseEntity
                 .ok()
                 .body(this.profileService.fetchProfileByUserId(userId));

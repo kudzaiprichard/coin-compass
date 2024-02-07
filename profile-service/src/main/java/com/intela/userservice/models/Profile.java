@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Profile {
     @Id
-    private Integer id;
+    private String id;
     private String firstname;
     private String lastname;
     private String mobile;

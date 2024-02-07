@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import static com.intela.authservice.util.Util.getUserByJwtToken;
 import static com.intela.authservice.util.Util.getUserByToken;
 
 @Service
@@ -47,11 +48,15 @@ public class AuthService {
     public LoggedUserResponse fetchLoggedInUserByToken(
             HttpServletRequest request
     ){
-        User user = getUserByToken(request, jwtService, this.userRepository);
+        User user = getUserByToken(request, this.jwtService, this.userRepository);
         return LoggedUserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .build();
+    }
+
+    public String getLoggedInUserId(String jwtToken){
+        return getUserByJwtToken(jwtToken,this.userRepository, this.jwtService);
     }
 
     private void revokeAllUserTokens(User user){

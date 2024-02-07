@@ -46,17 +46,11 @@ public class AuthController {
 
 
     //Only returns users id
-    @GetMapping("/getLoggedInUserId")
-    public ResponseEntity<String> getLoggedInUser(
-            HttpServletRequest request
+    @GetMapping("/getLoggedInUserId/{token}")
+    public String getLoggedInUser(
+            @PathVariable String token
     ){
-        return ResponseEntity
-                .ok()
-                .body(this.authService.fetchLoggedInUserByToken(request).getId());
-    }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello(){
-        return ResponseEntity.ok().body("hello");
+        return this.authService.getLoggedInUserId(token);
     }
 }

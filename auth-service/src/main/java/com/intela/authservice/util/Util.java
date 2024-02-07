@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @RequiredArgsConstructor
 public class Util {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     public static User getUserByToken(HttpServletRequest request, JwtService jwtService, UserRepository userRepository) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -26,5 +27,14 @@ public class Util {
 
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public static String getUserByJwtToken(String jwtToken, UserRepository userRepository, JwtService jwtService) {
+        final String userEmail;
+        userEmail = jwtService.extractUsername(jwtToken);
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return user.getId();
     }
 }
