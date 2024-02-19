@@ -1,5 +1,12 @@
+version: '2.4'
+
 services:
   zipkin:
-    image: 'openzipkin/zipkin:latest'
+    image: ghcr.io/openzipkin/zipkin-slim:${TAG:-latest}
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+      - SELF_TRACING_ENABLED=true
+      #- JAVA_OPTS=-Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
     ports:
-      - '9411'
+      - "9411:9411"

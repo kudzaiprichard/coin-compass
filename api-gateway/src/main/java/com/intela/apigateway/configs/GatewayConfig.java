@@ -16,10 +16,9 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                //Todo: include predict api
                 .route("profile-service", r -> r.path("/api/v1/profile/**")
                         .filters(f -> f.filter(filter))
-                        .uri("http://localhost:8085")) //lb://profile-service
+                        .uri("lb://profile-service")) //
 
                 .route("favourite-service", r -> r.path("/api/v1/favorite/**")
                         .filters(f -> f.filter(filter))
@@ -27,13 +26,15 @@ public class GatewayConfig {
 
                 .route("crypto-service", r -> r.path("/api/v1/profile/**")
                         .filters(f -> f.filter(filter))
-                        .uri("lb://profile-service"))
+                        .uri("lb://crypto-service"))
+
+                .route("predict-service", r -> r.path("/api/v1/predict/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://predict-service"))
 
                 .route("auth-service", r -> r.path("/api/v1/auth/**")
                         .filters(f -> f.filter(filter))
-                        .uri("http://localhost:8081"))
-                //Todo: make it use uri below
-                //lb://auth-service
+                        .uri("lb://auth-service"))
 
                 .build();
     }
