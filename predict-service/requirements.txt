@@ -1,0 +1,16 @@
+blinker==1.7.0
+click==8.1.7
+colorama==0.4.6
+dnspython==2.6.1
+Flask==3.0.2
+flask-eureka-client==1.0.2
+ifaddr==0.2.0
+itsdangerous==2.1.2
+Jinja2==3.1.3
+MarkupSafe==2.1.5
+marshmallow==3.20.2
+packaging==23.2
+py_eureka_client==0.11.9
+python-dotenv==1.0.1
+urllib3==2.2.1
+Werkzeug==3.0.1
