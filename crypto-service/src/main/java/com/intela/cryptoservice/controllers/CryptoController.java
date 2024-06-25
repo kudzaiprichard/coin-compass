@@ -1,14 +1,9 @@
 package com.intela.cryptoservice.controllers;
 
-import com.binance.api.client.domain.market.Candlestick;
 import com.intela.cryptoservice.models.CandleStick;
 import com.intela.cryptoservice.services.BinanceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,28 +11,21 @@ import java.util.List;
 @RequestMapping("/api/v1/crypto")
 @RequiredArgsConstructor
 public class CryptoController {
+
     private final BinanceService binanceService;
-    @GetMapping("/")
-    public ResponseEntity<List<CandleStick>> fetchAllCryptoCurrencies() {
-        return ResponseEntity.ok()
-                .body(binanceService.fetchLatestCandleSticks());
+
+    @GetMapping("/candlesticks")
+    public List<CandleStick> fetchAllCryptoCurrencies() {
+        return binanceService.fetchLatestCandleSticks();
     }
 
-    //Get crypto by code
-    @GetMapping("/{symbol}")
-    public ResponseEntity<Candlestick> fetchCryptoByCode(
-            @PathVariable String symbol
-    ) {
-        return ResponseEntity.ok()
-                .body(this.binanceService.fetchBySymbol(symbol));
+    @GetMapping("/candlestick")
+    public CandleStick fetchCandlestickBySymbol(@RequestParam String symbol) {
+        return binanceService.fetchBySymbol(symbol);
     }
 
-    //Predict crypto
-    @GetMapping("/predict/{symbol}")
-    public ResponseEntity<Long> predict(
-            @PathVariable String symbol
-    ) {
-        return ResponseEntity.ok()
-                .body(this.binanceService.predict(symbol));
+    @GetMapping("/predict")
+    public Double predictBySymbol(@RequestParam String symbol) {
+        return binanceService.predict(symbol);
     }
 }

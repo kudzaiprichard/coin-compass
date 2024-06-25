@@ -8,6 +8,12 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CandleStick extends Candlestick {
-    private String Symbol;
+@Data
+public class CandleStick {
+    private String symbol;
+    private Double open_price;
+    private Double high_price;
+    private Double low_price;
+    private Double volume;
+    private Double close_price;
 }

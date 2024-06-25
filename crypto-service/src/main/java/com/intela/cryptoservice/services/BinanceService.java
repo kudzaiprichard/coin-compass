@@ -1,77 +1,82 @@
 package com.intela.cryptoservice.services;
 
-import com.binance.api.client.domain.market.CandlestickInterval;
-import com.intela.cryptoservice.config.Config;
-import com.intela.cryptoservice.config.MyWebSocketListener;
+import com.intela.cryptoservice.client.PredictClient;
 import com.intela.cryptoservice.models.CandleStick;
 import lombok.RequiredArgsConstructor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.WebSocket;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class BinanceService {
 
-    private final OkHttpClient client;
-    private final Config config;
-    private final RestClient restClient = RestClient.create();
-
+    private final PredictClient predictClient;
+    private final RestTemplate restTemplate;
     private final List<CandleStick> candlestickList = new ArrayList<>();
 
-    public void connectAndSubscribe() {
-        for (String symbol : this.config.symbols()) {
-            String url = String.format("wss://stream.binance.com:9443/ws/%s@kline_%s", symbol, CandlestickInterval.DAILY);
-            try {
-                WebSocket webSocket = client.newWebSocket(new Request.Builder().url(url).build(), new MyWebSocketListener(this, symbol));
-                webSocket.wait(1000);
-            } catch (Exception e) {
-                throw new RuntimeException("Error connecting to websocket for symbol " + symbol, e);
+    public void fetchAndStoreCandlestickData() {
+        String[] symbols = {"bitcoin", "ethereum"};
+        String days = "1";
+
+        for (String symbol : symbols) {
+            String url = String.format("https://api.coingecko.com/api/v3/coins/%s/market_chart?vs_currency=usd&days=%s", symbol, days);
+            Map<String, Object> data = restTemplate.getForObject(url, Map.class);
+
+            if (data != null && data.containsKey("prices")) {
+                List<List<Object>> prices = (List<List<Object>>) data.get("prices");
+
+                // Only take the first price data for simplicity
+                if (!prices.isEmpty()) {
+                    List<Object> price = prices.get(0); // Get the first entry
+
+                    CandleStick candlestick = new CandleStick();
+                    candlestick.setSymbol(symbol);
+
+                    // Extracting values from the price list
+                    Double timestamp = ((Number) price.get(0)).doubleValue();
+                    Double priceValue = ((Number) price.get(1)).doubleValue();
+
+                    candlestick.setOpen_price(priceValue); // Assuming the price array has [timestamp, price]
+                    candlestick.setClose_price(priceValue); // Adjust as per your data structure
+
+                    // You need to parse the other values from the API response accordingly
+                    candlestick.setHigh_price(0.0); // Replace with actual high price logic
+                    candlestick.setLow_price(0.0); // Replace with actual low price logic
+                    candlestick.setVolume(0.0); // Replace with actual volume logic
+
+                    candlestickList.add(candlestick);
+                }
             }
         }
-    }
-
-    public void handleCandleStickData(CandleStick candlestickData) {
-        this.candlestickList.add(candlestickData);
     }
 
     public List<CandleStick> fetchLatestCandleSticks() {
-        this.connectAndSubscribe();
+        this.fetchAndStoreCandlestickData();
 
-        if(!candlestickList.isEmpty()){
-           return candlestickList;
+        if (!candlestickList.isEmpty()) {
+            return candlestickList;
         }
 
-        throw new RuntimeException("Failed to fetch candle stick , Candle stick List empty");
+        throw new RuntimeException("Failed to fetch candlesticks, Candlestick List empty");
     }
 
     public CandleStick fetchBySymbol(String symbol) {
-        this.connectAndSubscribe();
+        this.fetchAndStoreCandlestickData();
 
-        for(CandleStick candlestick : candlestickList){
-            if(Objects.equals(candlestick.getSymbol(), symbol)){
+        for (CandleStick candlestick : candlestickList) {
+            if (symbol.equalsIgnoreCase(candlestick.getSymbol())) {
                 return candlestick;
             }
         }
-        throw new RuntimeException("Failed to fetch candlestick symbol");
+        throw new RuntimeException("Failed to fetch candlestick symbol: " + symbol);
     }
 
-    public Long predict(String symbol) {
-        String uri = ""; //Todo: add predict-service uri
-        var candle = this.fetchBySymbol(symbol);
-
-        //Should return prediction score
-        return this.restClient
-                .post()
-                .uri(uri)
-                .body(candle)
-                .retrieve()
-                .body(Long.class);
+    public Double predict(String symbol) {
+        CandleStick candlestick = this.fetchBySymbol(symbol);
+        return predictClient.predict(candlestick);
     }
 }
